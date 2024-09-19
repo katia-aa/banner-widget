@@ -32,27 +32,34 @@ const App = ({
   );
 };
 
+// Dynamically create the banner container and inject it at the top of the page
 const rootElement = document.getElementById("EDIT: ROOT_ID");
 if (!rootElement) {
   console.error("Root element not found");
   throw new Error("Root element not found");
 }
+
+// Create a new container for the banner and add it to the top of the body
+const bannerContainer = document.createElement("div");
+document.body.prepend(bannerContainer); // Add the container to the top of the body
+
+const shadowRoot = bannerContainer.attachShadow({ mode: "open" }); // Use Shadow DOM
+
+// Create a style element and add the CSS
 const styleElement = document.createElement("style");
 styleElement.textContent = css;
-const shadowRoot = rootElement.attachShadow({ mode: "open" });
 shadowRoot.appendChild(styleElement);
+
+// Extract data-* attributes from the root element
 const text = rootElement.getAttribute("data-text") || "Default Banner Text";
-const speed = rootElement.getAttribute("data-speed") || "10s";
+const speed = parseInt(rootElement.getAttribute("data-speed"), 10) || 20;
 const backgroundColor =
-  rootElement.getAttribute("data-background-color") || "bg-blue-500";
-const textColor = rootElement.getAttribute("data-text-color") || "text-white";
-const fontSize = rootElement.getAttribute("data-font-size") || "text-lg";
-const fontWeight =
-  rootElement.getAttribute("data-font-weight") || "font-normal";
+  rootElement.getAttribute("data-background-color") || "blue";
+const textColor = rootElement.getAttribute("data-text-color") || "white";
+const fontSize = rootElement.getAttribute("data-font-size") || "16px";
+const fontWeight = rootElement.getAttribute("data-font-weight") || "bold";
 
-console.log("hi");
-
-// Render the Banner component
+// Render the Banner component in the shadow DOM
 render(
   <App
     text={text}
