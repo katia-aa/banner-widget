@@ -9,16 +9,18 @@ interface BannerProps {
   textColor: string;
   fontSize: string;
   fontWeight: string;
+  children?: preact.ComponentChildren; // Optional children prop
 }
 
-const Banner = ({
+export const Banner = ({
   text,
   speed,
   backgroundColor,
   textColor,
   fontSize,
   fontWeight,
-}: BannerProps) => {
+  children,
+}: BannerProps & { children: preact.ComponentChildren }) => {
   const [offset, setOffset] = useState(window.innerWidth); // Start off the screen to the right
 
   // Function to handle the banner animation logic
@@ -63,10 +65,8 @@ const Banner = ({
       }}
     >
       <div id="banner-text" style={bannerStyles}>
-        {text}
+        {children || text}
       </div>
     </div>
   );
 };
-
-export default Banner;

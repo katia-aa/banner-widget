@@ -1,7 +1,13 @@
 /** @jsx h */
 import { h, render } from "preact";
-import Banner from "./Banner";
+import { Banner } from "./Banner";
 import css from "./styles/output.css";
+
+enum Variant {
+  COOKIE = "COOKIE",
+  ANNOUNCEMENT = "ANNOUNCEMENT",
+  DEFAULT = "DEFAULT",
+}
 
 interface AppProps {
   text: string;
@@ -10,6 +16,7 @@ interface AppProps {
   textColor: string;
   fontSize: string;
   fontWeight: string;
+  variant: Variant;
 }
 
 const App = ({
@@ -19,6 +26,7 @@ const App = ({
   textColor,
   fontSize,
   fontWeight,
+  variant = "DEFAULT" as Variant,
 }: AppProps) => {
   return (
     <Banner
@@ -28,7 +36,11 @@ const App = ({
       textColor={textColor}
       fontSize={fontSize}
       fontWeight={fontWeight}
-    />
+    >
+      {variant === "COOKIE" ? <div>COOKIE</div> : null}
+      {variant === "ANNOUNCEMENT" ? <div>ANNOUNCEMENT</div> : null}
+      {/* Add any children here if needed */}
+    </Banner>
   );
 };
 
@@ -58,6 +70,7 @@ const backgroundColor =
 const textColor = rootElement.getAttribute("data-text-color") || "white";
 const fontSize = rootElement.getAttribute("data-font-size") || "16px";
 const fontWeight = rootElement.getAttribute("data-font-weight") || "bold";
+const variant = rootElement.getAttribute("data-variant") || "DEFAULT";
 
 // Render the Banner component in the shadow DOM
 render(
@@ -68,6 +81,7 @@ render(
     textColor={textColor}
     fontSize={fontSize}
     fontWeight={fontWeight}
+    variant={variant as Variant}
   />,
   shadowRoot
 );
