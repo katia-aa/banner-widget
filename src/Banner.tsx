@@ -4,7 +4,7 @@ import { useEffect, useState } from "preact/hooks";
 // Define the Banner component
 interface BannerProps {
   text: string;
-  speed: number; // Speed is now a number for better control
+  speed: number; // Speed controls how fast the banner moves
   backgroundColor: string;
   textColor: string;
   fontSize: string;
@@ -21,16 +21,26 @@ const Banner = ({
 }: BannerProps) => {
   const [offset, setOffset] = useState(window.innerWidth); // Start off the screen to the right
 
+  // Function to handle the banner animation logic
+  const startBannerAnimation = (bannerWidth: number) => {
+    return setInterval(() => {
+      let calculatedSpeed = 1;
+      if (speed == 2) calculatedSpeed = 2;
+
+      // Move left continuously, reset when it goes completely off-screen to the left
+      setOffset((prev) =>
+        prev > window.innerWidth ? -bannerWidth : prev + calculatedSpeed
+      );
+    }, 20);
+  };
+
   useEffect(() => {
     const banner = document.getElementById("banner-text");
     const bannerWidth = banner?.offsetWidth || 0; // Get banner width
 
-    const interval = setInterval(() => {
-      // Move left continuously, reset when it goes completely off-screen to the left
-      setOffset((prev) => (prev > window.innerWidth ? -bannerWidth : prev + 2)); // Adjust '2' for speed
-    }, 20); // Adjust speed of animation by modifying interval duration
+    const intervalId = startBannerAnimation(bannerWidth); // Start the animation
 
-    return () => clearInterval(interval);
+    return () => clearInterval(intervalId); // Clean up the interval on unmount
   }, [speed]);
 
   const bannerStyles = {
@@ -47,15 +57,12 @@ const Banner = ({
       className="relative w-full overflow-hidden"
       style={{
         height: "30px",
-        backgroundColor: backgroundColor,
+        backgroundColor,
         display: "flex",
         alignItems: "center",
       }}
     >
-      <div
-        id="banner-text"
-        style={bannerStyles} // Apply custom inline styles here
-      >
+      <div id="banner-text" style={bannerStyles}>
         {text}
       </div>
     </div>
