@@ -33,7 +33,7 @@ const App = ({
 };
 
 // Dynamically create the banner container and inject it at the top of the page
-const rootElement = document.getElementById("EDIT: ROOT_ID");
+const rootElement = document.getElementById("banner");
 if (!rootElement) {
   console.error("Root element not found");
   throw new Error("Root element not found");
