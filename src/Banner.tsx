@@ -1,4 +1,4 @@
-import { h } from "preact";
+import { Fragment, h } from "preact";
 import { useEffect, useState } from "preact/hooks";
 
 // Define the Banner component
@@ -68,5 +68,49 @@ export const Banner = ({
         {children || text}
       </div>
     </div>
+  );
+};
+
+export enum Variant {
+  COOKIE = "COOKIE",
+  ANNOUNCEMENT = "ANNOUNCEMENT",
+  DEFAULT = "DEFAULT",
+}
+
+interface BannerWrapperProps {
+  text: string;
+  speed: number;
+  backgroundColor: string;
+  textColor: string;
+  fontSize: string;
+  fontWeight: string;
+  variant: Variant;
+}
+
+export const BannerWrapper = ({
+  text,
+  speed,
+  backgroundColor,
+  textColor,
+  fontSize,
+  fontWeight,
+  variant = "DEFAULT" as Variant,
+}: BannerWrapperProps) => {
+  return (
+    <Banner
+      text={text}
+      speed={speed}
+      backgroundColor={backgroundColor}
+      textColor={textColor}
+      fontSize={fontSize}
+      fontWeight={fontWeight}
+    >
+      {variant === "COOKIE" ? (
+        <Fragment>COOKIE</Fragment>
+      ) : variant === "ANNOUNCEMENT" ? (
+        <Fragment>ANNOUNCEMENT</Fragment>
+      ) : null}
+      {/* Add any children here if needed */}
+    </Banner>
   );
 };
