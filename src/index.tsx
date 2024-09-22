@@ -62,18 +62,32 @@ const shadowRoot = bannerContainer.attachShadow({ mode: "open" }); // Use Shadow
 
 // Create a style element and add the CSS
 const styleElement = document.createElement("style");
-styleElement.textContent = css;
+styleElement.textContent = css.toString();
 shadowRoot.appendChild(styleElement);
 
+// Function to extract data-* attributes from the root element
+const getBannerAttributes = (rootElement: HTMLElement) => {
+  return {
+    text: rootElement.getAttribute("data-text") || "Default Banner Text",
+    speed: parseInt(rootElement.getAttribute("data-speed") || "10"),
+    backgroundColor: rootElement.getAttribute("data-background-color") || "blue",
+    textColor: rootElement.getAttribute("data-text-color") || "white",
+    fontSize: rootElement.getAttribute("data-font-size") || "16px",
+    fontWeight: rootElement.getAttribute("data-font-weight") || "bold",
+    variant: rootElement.getAttribute("data-variant") || "DEFAULT",
+  };
+};
+
 // Extract data-* attributes from the root element
-const text = rootElement.getAttribute("data-text") || "Default Banner Text";
-const speed = parseInt(rootElement.getAttribute("data-speed"), 10) || 20;
-const backgroundColor =
-  rootElement.getAttribute("data-background-color") || "blue";
-const textColor = rootElement.getAttribute("data-text-color") || "white";
-const fontSize = rootElement.getAttribute("data-font-size") || "16px";
-const fontWeight = rootElement.getAttribute("data-font-weight") || "bold";
-const variant = rootElement.getAttribute("data-variant") || "DEFAULT";
+const {
+  text,
+  speed,
+  backgroundColor,
+  textColor,
+  fontSize,
+  fontWeight,
+  variant,
+} = getBannerAttributes(rootElement);
 
 // Render the Banner component in the shadow DOM
 render(
