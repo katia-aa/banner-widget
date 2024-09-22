@@ -37,8 +37,11 @@ const App = ({
       fontSize={fontSize}
       fontWeight={fontWeight}
     >
-      {variant === "COOKIE" ? <div>COOKIE</div> : null}
-      {variant === "ANNOUNCEMENT" ? <div>ANNOUNCEMENT</div> : null}
+      {variant === "COOKIE" ? (
+        <div>COOKIE</div>
+      ) : variant === "ANNOUNCEMENT" ? (
+        <div>ANNOUNCEMENT</div>
+      ) : null}
       {/* Add any children here if needed */}
     </Banner>
   );

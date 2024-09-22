@@ -12,5 +12,5 @@
     "moduleResolution": "node",
     "outDir": "dist"
   },
-  "include": ["src"]
+  "include": ["src", "styles.d.ts"]
 }
