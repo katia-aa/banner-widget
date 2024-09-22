@@ -10,6 +10,7 @@ interface BannerProps {
   fontSize: string;
   fontWeight: string;
   children?: preact.ComponentChildren; // Optional children prop
+  variant: Variant;
 }
 
 export const Banner = ({
@@ -20,8 +21,10 @@ export const Banner = ({
   fontSize,
   fontWeight,
   children,
+  variant,
 }: BannerProps & { children: preact.ComponentChildren }) => {
   const [offset, setOffset] = useState(window.innerWidth); // Start off the screen to the right
+  const IS_MOVING_BANNER = variant === Variant.DEFAULT;
 
   // Function to handle the banner animation logic
   const startBannerAnimation = (bannerWidth: number) => {
@@ -39,19 +42,21 @@ export const Banner = ({
   useEffect(() => {
     const banner = document.getElementById("banner-text");
     const bannerWidth = banner?.offsetWidth || 0; // Get banner width
-
-    const intervalId = startBannerAnimation(bannerWidth); // Start the animation
+    let intervalId: number;
+    if (IS_MOVING_BANNER) {
+      intervalId = startBannerAnimation(bannerWidth); // Start the animation
+    }
 
     return () => clearInterval(intervalId); // Clean up the interval on unmount
   }, [speed]);
 
   const bannerStyles = {
-    transform: `translateX(${offset}px)`, // Move the text based on the offset
+    transform: IS_MOVING_BANNER ? `translateX(${offset}px)` : undefined, // Move the text based on the offset
+    whiteSpace: IS_MOVING_BANNER ? "nowrap" : undefined, // Prevent text wrapping
+    position: IS_MOVING_BANNER ? "absolute" : undefined, // Allow continuous movement
     color: textColor,
     fontSize: fontSize,
     fontWeight: fontWeight,
-    whiteSpace: "nowrap", // Prevent text wrapping
-    position: "absolute", // Allow continuous movement
   };
 
   return (
@@ -104,6 +109,7 @@ export const BannerWrapper = ({
       textColor={textColor}
       fontSize={fontSize}
       fontWeight={fontWeight}
+      variant={variant}
     >
       {variant === "COOKIE" ? (
         <Fragment>COOKIE</Fragment>
