@@ -1,7 +1,9 @@
 /** @jsx h */
-import { h, render } from "preact";
+import { h, render, Fragment } from "preact";
 import { Banner } from "./Banner";
 import css from "./styles/output.css";
+import { getBannerAttributes } from "./utils/getBannerAttributes";
+import { createBannerContainer } from "./utils/createBannerContainer";
 
 enum Variant {
   COOKIE = "COOKIE",
@@ -38,9 +40,9 @@ const App = ({
       fontWeight={fontWeight}
     >
       {variant === "COOKIE" ? (
-        <div>COOKIE</div>
+        <Fragment>COOKIE</Fragment>
       ) : variant === "ANNOUNCEMENT" ? (
-        <div>ANNOUNCEMENT</div>
+        <Fragment>ANNOUNCEMENT</Fragment>
       ) : null}
       {/* Add any children here if needed */}
     </Banner>
@@ -54,29 +56,7 @@ if (!rootElement) {
   throw new Error("Root element not found");
 }
 
-// Create a new container for the banner and add it to the top of the body
-const bannerContainer = document.createElement("div");
-document.body.prepend(bannerContainer); // Add the container to the top of the body
-
-const shadowRoot = bannerContainer.attachShadow({ mode: "open" }); // Use Shadow DOM
-
-// Create a style element and add the CSS
-const styleElement = document.createElement("style");
-styleElement.textContent = css.toString();
-shadowRoot.appendChild(styleElement);
-
-// Function to extract data-* attributes from the root element
-const getBannerAttributes = (rootElement: HTMLElement) => {
-  return {
-    text: rootElement.getAttribute("data-text") || "Default Banner Text",
-    speed: parseInt(rootElement.getAttribute("data-speed") || "10"),
-    backgroundColor: rootElement.getAttribute("data-background-color") || "blue",
-    textColor: rootElement.getAttribute("data-text-color") || "white",
-    fontSize: rootElement.getAttribute("data-font-size") || "16px",
-    fontWeight: rootElement.getAttribute("data-font-weight") || "bold",
-    variant: rootElement.getAttribute("data-variant") || "DEFAULT",
-  };
-};
+const shadowRoot = createBannerContainer(css.toString());
 
 // Extract data-* attributes from the root element
 const {
