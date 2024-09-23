@@ -11,6 +11,8 @@ interface BannerProps {
   fontWeight: string;
   children?: preact.ComponentChildren; // Optional children prop
   variant: Variant;
+  link: string;
+  linkText: string;
 }
 
 export const Banner = ({
@@ -22,6 +24,8 @@ export const Banner = ({
   fontWeight,
   children,
   variant,
+  link,
+  linkText,
 }: BannerProps & { children: preact.ComponentChildren }) => {
   const [offset, setOffset] = useState(window.innerWidth); // Start off the screen to the right
   const IS_MOVING_BANNER = variant === Variant.DEFAULT;
@@ -50,7 +54,7 @@ export const Banner = ({
     return () => clearInterval(intervalId); // Clean up the interval on unmount
   }, [speed]);
 
-  const bannerStyles = {
+  const movingBannerStyles = {
     transform: IS_MOVING_BANNER ? `translateX(${offset}px)` : undefined, // Move the text based on the offset
     whiteSpace: IS_MOVING_BANNER ? "nowrap" : undefined, // Prevent text wrapping
     position: IS_MOVING_BANNER ? "absolute" : undefined, // Allow continuous movement
@@ -59,18 +63,37 @@ export const Banner = ({
     fontWeight: fontWeight,
   };
 
+  const bannerStyles = {
+    color: textColor,
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "0.5rem 1rem",
+  };
+
   return (
     <div
       className="relative w-full overflow-hidden"
       style={{
-        height: "30px",
+        borderRadius: "8px",
         backgroundColor,
         display: "flex",
         alignItems: "center",
+        height: IS_MOVING_BANNER ? "50px" : undefined,
       }}
     >
-      <div id="banner-text" style={bannerStyles}>
-        {children || text}
+      <div
+        id="banner-text"
+        style={IS_MOVING_BANNER ? movingBannerStyles : bannerStyles}
+      >
+        {children || (
+          <div>
+            {text} Check out the<a href={link}>{linkText}</a>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -90,6 +113,10 @@ interface BannerWrapperProps {
   fontSize: string;
   fontWeight: string;
   variant: Variant;
+  buttonText: string;
+  link: string;
+  linkText: string;
+  cookiePolicyLink: string | null;
 }
 
 export const BannerWrapper = ({
@@ -100,6 +127,10 @@ export const BannerWrapper = ({
   fontSize,
   fontWeight,
   variant = "DEFAULT" as Variant,
+  buttonText,
+  link,
+  linkText,
+  cookiePolicyLink,
 }: BannerWrapperProps) => {
   return (
     <Banner
@@ -110,13 +141,34 @@ export const BannerWrapper = ({
       fontSize={fontSize}
       fontWeight={fontWeight}
       variant={variant}
+      link={link}
+      linkText={linkText}
     >
-      {variant === "COOKIE" ? (
-        <Fragment>COOKIE</Fragment>
-      ) : variant === "ANNOUNCEMENT" ? (
-        <Fragment>ANNOUNCEMENT</Fragment>
+      {variant === "ANNOUNCEMENT" ? (
+        <Fragment>
+          <div>{text}</div>
+          <button className="bg-white hover:bg-white text-black font-bold py-2 px-4 rounded">
+            {buttonText}
+          </button>
+        </Fragment>
+      ) : variant === "COOKIE" ? (
+        <Fragment>
+          <div>
+            We use third-party cookies in order to personalize your experience{" "}
+            <span>
+              Read our <a href={cookiePolicyLink || undefined}>Cookie Policy</a>
+            </span>
+          </div>
+          <div>
+            <button className="bg-white hover:bg-white text-black font-bold py-2 px-4 rounded">
+              Accept
+            </button>
+            <button className="bg-white hover:bg-white text-black font-bold py-2 px-4 rounded">
+              Decline
+            </button>
+          </div>
+        </Fragment>
       ) : null}
-      {/* Add any children here if needed */}
     </Banner>
   );
 };

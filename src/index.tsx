@@ -23,6 +23,10 @@ const {
   fontSize,
   fontWeight,
   variant,
+  buttonText,
+  link,
+  linkText,
+  cookiePolicyLink,
 } = getBannerAttributes(rootElement);
 
 // Render the Banner component in the shadow DOM
@@ -35,6 +39,10 @@ render(
     fontSize={fontSize}
     fontWeight={fontWeight}
     variant={variant as Variant}
+    buttonText={buttonText}
+    link={link}
+    linkText={linkText}
+    cookiePolicyLink={cookiePolicyLink}
   />,
   shadowRoot
 );
