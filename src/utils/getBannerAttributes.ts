@@ -10,6 +10,7 @@ const attributeConfig = {
   link: "https://example.com",
   linkText: "here",
   cookiePolicyLink: null,
+  secondaryText: null,
 };
 
 export const getBannerAttributes = (rootElement: HTMLElement) => {

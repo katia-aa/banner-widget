@@ -1,3 +1,4 @@
+/** @jsx h */
 import { Fragment, h } from "preact";
 import { useEffect, useState } from "preact/hooks";
 
@@ -13,6 +14,7 @@ interface BannerProps {
   variant: Variant;
   link: string;
   linkText: string;
+  secondaryText?: string;
 }
 
 export const Banner = ({
@@ -26,6 +28,7 @@ export const Banner = ({
   variant,
   link,
   linkText,
+  secondaryText,
 }: BannerProps & { children: preact.ComponentChildren }) => {
   const [offset, setOffset] = useState(window.innerWidth); // Start off the screen to the right
   const IS_MOVING_BANNER = variant === Variant.DEFAULT;
@@ -91,7 +94,15 @@ export const Banner = ({
       >
         {children || (
           <div>
-            {text} Check out the<a href={link}>{linkText}</a>
+            {text}{" "}
+            {secondaryText?.length ? (
+              <span style={{ fontWeight: "normal", opacity: "0.8" }}>
+                {secondaryText}
+              </span>
+            ) : null}{" "}
+            <a style={{ fontWeight: "normal", opacity: "0.8" }} href={link}>
+              {linkText}
+            </a>
           </div>
         )}
       </div>
@@ -117,6 +128,7 @@ interface BannerWrapperProps {
   link: string;
   linkText: string;
   cookiePolicyLink: string | null;
+  secondaryText?: string;
 }
 
 export const BannerWrapper = ({
@@ -131,6 +143,7 @@ export const BannerWrapper = ({
   link,
   linkText,
   cookiePolicyLink,
+  secondaryText,
 }: BannerWrapperProps) => {
   return (
     <Banner
@@ -143,10 +156,18 @@ export const BannerWrapper = ({
       variant={variant}
       link={link}
       linkText={linkText}
+      secondaryText={secondaryText}
     >
       {variant === "ANNOUNCEMENT" ? (
         <Fragment>
-          <div>{text}</div>
+          <div>
+            {text}{" "}
+            {secondaryText?.length ? (
+              <span style={{ fontWeight: "normal", opacity: "0.8" }}>
+                {secondaryText}
+              </span>
+            ) : null}
+          </div>
           <button className="bg-white hover:bg-white text-black font-bold py-2 px-4 rounded">
             {buttonText}
           </button>
@@ -154,13 +175,14 @@ export const BannerWrapper = ({
       ) : variant === "COOKIE" ? (
         <Fragment>
           <div>
-            We use third-party cookies in order to personalize your experience{" "}
-            <span>
-              Read our <a href={cookiePolicyLink || undefined}>Cookie Policy</a>
+            We use third-party cookies in order to personalize your experience.{" "}
+            <span style={{ fontWeight: "normal", opacity: "0.8" }}>
+              Read our{" "}
+              <a href={cookiePolicyLink || undefined}>Cookie Policy.</a>
             </span>
           </div>
           <div>
-            <button className="bg-white hover:bg-white text-black font-bold py-2 px-4 rounded">
+            <button className="bg-white hover:bg-white text-black font-bold py-2 px-4 rounded mr-3">
               Accept
             </button>
             <button className="bg-white hover:bg-white text-black font-bold py-2 px-4 rounded">

@@ -27,6 +27,7 @@ const {
   link,
   linkText,
   cookiePolicyLink,
+  secondaryText,
 } = getBannerAttributes(rootElement);
 
 // Render the Banner component in the shadow DOM
@@ -43,6 +44,7 @@ render(
     link={link}
     linkText={linkText}
     cookiePolicyLink={cookiePolicyLink}
+    secondaryText={secondaryText}
   />,
   shadowRoot
 );
