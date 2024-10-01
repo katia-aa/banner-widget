@@ -100,7 +100,14 @@ export const Banner = ({
                 {secondaryText}
               </span>
             ) : null}{" "}
-            <a style={{ fontWeight: "normal", opacity: "0.8" }} href={link}>
+            <a
+              style={{
+                fontWeight: "normal",
+                opacity: "0.8",
+                textDecoration: "underline",
+              }}
+              href={link}
+            >
               {linkText}
             </a>
           </div>
@@ -183,7 +190,7 @@ export const BannerWrapper = ({
           </div>
           <div>
             <button className="bg-white hover:bg-white text-black font-bold py-2 px-4 rounded mr-3">
-              Accept
+              <a>Accept</a>
             </button>
             <button className="bg-white hover:bg-white text-black font-bold py-2 px-4 rounded">
               Decline
